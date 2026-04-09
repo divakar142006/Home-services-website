@@ -56,6 +56,9 @@ const Contact = () => {
   const [formData, setFormData] = useState(initialFormState);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const canAccessWorkerPage = isOwnerEmail(user?.email);
+  const handleScrollToServices = () => {
+    navigate("/home");
+  };
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({
@@ -81,7 +84,7 @@ const Contact = () => {
         </div>
 
         <ul className="nav-links">
-          <li className="nav-link" onClick={() => navigate("/customer")}>
+          <li className="nav-link" onClick={handleScrollToServices}>
             <FontAwesomeIcon icon={faTools} className="nav-icon" />
             Services
           </li>
