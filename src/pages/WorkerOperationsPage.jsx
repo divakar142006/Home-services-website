@@ -128,33 +128,48 @@ const WorkerOperationsPage = () => {
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState([]);
   const [isLoadingAssignments, setIsLoadingAssignments] = useState(true);
+  const [assignmentsError, setAssignmentsError] = useState("");
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "bookings"), (snapshot) => {
-      const liveAssignments = snapshot.docs
-        .map((bookingDoc) => {
-          const bookingData = bookingDoc.data();
+    const unsubscribe = onSnapshot(
+      collection(db, "bookings"),
+      (snapshot) => {
+        const liveAssignments = snapshot.docs
+          .map((bookingDoc) => {
+            const bookingData = bookingDoc.data();
 
-          return {
-            id: bookingDoc.id,
-            customerName: bookingData.customerName || bookingData.name || "Customer",
-            phone: bookingData.phone || "Not added",
-            service: bookingData.service || "General Service",
-            address: bookingData.address || "Address not added",
-            bookingDate: bookingData.bookingDate || bookingData.date || "Date pending",
-            slot: bookingData.slot || "To Be Assigned",
-            amount: bookingData.amount || 0,
-            status: bookingData.status || "Pending",
-            priority: bookingData.priority || "Medium",
-            worker: bookingData.worker || "Waiting Assignment",
-            createdAt: bookingData.createdAt?.toMillis?.() || 0
-          };
-        })
-        .sort((first, second) => second.createdAt - first.createdAt);
+            return {
+              id: bookingDoc.id,
+              customerName: bookingData.customerName || bookingData.name || "Customer",
+              phone: bookingData.phone || "Not added",
+              service: bookingData.service || "General Service",
+              address: bookingData.address || "Address not added",
+              bookingDate: bookingData.bookingDate || bookingData.date || "Date pending",
+              slot: bookingData.slot || "To Be Assigned",
+              amount: bookingData.amount || 0,
+              status: bookingData.status || "Pending",
+              priority: bookingData.priority || "Medium",
+              worker: bookingData.worker || "Waiting Assignment",
+              createdAt:
+                bookingData.createdAt?.toMillis?.() ||
+                bookingData.createdAtMillis ||
+                bookingData.updatedAt?.toMillis?.() ||
+                0
+            };
+          })
+          .sort((first, second) => second.createdAt - first.createdAt);
 
-      setAssignments(liveAssignments);
-      setIsLoadingAssignments(false);
-    });
+        setAssignments(liveAssignments);
+        setAssignmentsError("");
+        setIsLoadingAssignments(false);
+      },
+      (error) => {
+        console.error(error);
+        setAssignments([]);
+        setAssignmentsError("Could not load bookings on the worker page. Check Firestore access rules for the owner account.");
+        setIsLoadingAssignments(false);
+      }
+    );
 
     return () => unsubscribe();
   }, []);
@@ -424,6 +439,11 @@ const WorkerOperationsPage = () => {
           <div className="worker-ops-empty-state">
             <h3>Loading service requests...</h3>
             <p>The worker page is syncing the latest bookings from Firebase.</p>
+          </div>
+        ) : assignmentsError ? (
+          <div className="worker-ops-empty-state">
+            <h3>Bookings unavailable</h3>
+            <p>{assignmentsError}</p>
           </div>
         ) : assignments.length === 0 ? (
           <div className="worker-ops-empty-state">

@@ -66,16 +66,14 @@ function Bookingform() {
       amount: 600,
       priority: "Medium"
     };
+    const createdAtMillis = Date.now();
 
     try {
       setIsSubmitting(true);
       setFeedbackTone("success");
-      setFeedbackMessage("Booking request received.");
-      setFormData(initialFormData);
+      setFeedbackMessage("Saving your booking...");
 
-      setIsSubmitting(false);
-
-      addDoc(collection(db, "bookings"), {
+      await addDoc(collection(db, "bookings"), {
         userId: authUser.uid,
         userEmail: authUser.email || "",
         customerName: pendingFormData.name,
@@ -90,27 +88,15 @@ function Bookingform() {
         worker: "Waiting Assignment",
         slot: "To Be Assigned",
         status: "Pending",
-        createdAt: serverTimestamp()
-      })
-        .then(() => {
-          if (!isMountedRef.current) return;
+        createdAt: serverTimestamp(),
+        createdAtMillis
+      });
 
-          setFeedbackTone("success");
-          setFeedbackMessage("Your booking was added successfully.");
-        })
-        .catch((error) => {
-          console.error(error);
+      if (!isMountedRef.current) return;
 
-          if (!isMountedRef.current) return;
-
-          setFormData((currentValues) =>
-            isFormEmpty(currentValues) ? {
-              ...pendingFormData
-            } : currentValues
-          );
-          setFeedbackTone("error");
-          setFeedbackMessage("Failed to book service. Please try again.");
-        });
+      setFormData(initialFormData);
+      setFeedbackTone("success");
+      setFeedbackMessage("Your booking was added successfully.");
     } catch (error) {
       console.error(error);
 
@@ -123,7 +109,10 @@ function Bookingform() {
       );
       setFeedbackTone("error");
       setFeedbackMessage("Failed to book service. Please try again.");
-      setIsSubmitting(false);
+    } finally {
+      if (isMountedRef.current) {
+        setIsSubmitting(false);
+      }
     }
   };
 
