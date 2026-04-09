@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Navigate, Routes, Route } from "react-router-dom";
 import { useAuth } from "./contex/Authconfig";
 import SignupPage from "./pages/SignupPage";
 import "./App.css";
@@ -12,9 +12,10 @@ import { isOwnerEmail } from "./utils/ownerAccess";
 function App() {
   const { user } = useAuth();
   const isOwner = isOwnerEmail(user?.email);
+  const Router = import.meta.env.BASE_URL === "/" ? BrowserRouter : HashRouter;
   return (
   
-    <BrowserRouter>
+    <Router>
     <Routes>
   <Route path="/" element={<SignInPage/>} />
   <Route path="/signin" element={<SignInPage/>} />
@@ -39,7 +40,7 @@ function App() {
   <Route path="/booking" element={<Bookingform/>} />
   <Route path="/dashboard1" element={<Dashboard1/>} />
 </Routes>
-    </BrowserRouter>
+    </Router>
     
   );
 }
