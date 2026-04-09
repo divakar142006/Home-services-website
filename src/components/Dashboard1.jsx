@@ -569,6 +569,13 @@ const Dashboard1 = () => {
     );
   };
 
+  const scrollToDashboardSection = (sectionId) => {
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  };
+
   // ✅ SAVE PROFILE (INSTANT UI + FIRESTORE)
   const handleSave = async () => {
     if (!authUser) {
@@ -842,18 +849,30 @@ const Dashboard1 = () => {
         </div>
 
         <nav className="dashboard-nav">
-          <a href="#overview" className="dashboard-nav__item">
+          <button
+            type="button"
+            className="dashboard-nav__item"
+            onClick={() => scrollToDashboardSection("overview")}
+          >
             <FontAwesomeIcon icon={faHouse} />
             <span>Overview</span>
-          </a>
-          <a href="#profile-section" className="dashboard-nav__item">
+          </button>
+          <button
+            type="button"
+            className="dashboard-nav__item"
+            onClick={() => scrollToDashboardSection("profile-section")}
+          >
             <FontAwesomeIcon icon={faAddressCard} />
             <span>Profile</span>
-          </a>
-          <a href="#bookings-section" className="dashboard-nav__item">
+          </button>
+          <button
+            type="button"
+            className="dashboard-nav__item"
+            onClick={() => scrollToDashboardSection("bookings-section")}
+          >
             <FontAwesomeIcon icon={faCalendarCheck} />
             <span>Bookings</span>
-          </a>
+          </button>
         </nav>
 
         <div className="dashboard-sidebar__card">
