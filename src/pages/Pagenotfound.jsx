@@ -63,6 +63,15 @@ const Pagenotfound = () => {
           <div className="text_4042">0</div>
           <div className="text_4043">4</div>
         </div>
+        <div>
+            <button
+              type="button"
+              className="booking-button booking-button--ghost"
+              onClick={() => navigate("/home")}
+            >
+              Back Home
+            </button>
+        </div>
       </div>
     </StyledWrapper>
   );
