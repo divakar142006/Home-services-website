@@ -9,6 +9,7 @@ import Bookingform from "./components/Bookingform";
 import SignInPage from "./pages/SignInPage";
 import Dashboard1 from "./components/Dashboard1";
 import { isOwnerEmail } from "./utils/ownerAccess";
+import Pagenotfound from "./pages/Pagenotfound";
 function App() {
   const { user } = useAuth();
   const isOwner = isOwnerEmail(user?.email);
@@ -35,6 +36,7 @@ function App() {
       )
     }
   />
+  <Route path="*" element={<Pagenotfound/>} />
   <Route path="/home" element={<Home/>} />
   <Route path="/contact" element={<Contact />} />
   <Route path="/booking" element={<Bookingform/>} />
