@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Pagenotfound = () => {
+  const navigate=useNavigate()
   return (
     <StyledWrapper>
       <div className="main_wrapper">
@@ -66,7 +68,7 @@ const Pagenotfound = () => {
         <div>
             <button
               type="button"
-              className="booking-button booking-button--ghost"
+              className="notfound-btn"
               onClick={() => navigate("/home")}
             >
               Back Home
@@ -85,6 +87,34 @@ const StyledWrapper = styled.div`
   align-items: center;   /* vertical center */
   justify-content: center; /* horizontal center */
   overflow: hidden;
+
+
+  .notfound-btn {
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position:absolute;
+  bottom:20%;
+  left:45%;
+
+  
+}
+
+.notfound-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.notfound-btn:active {
+  transform: scale(0.97);
+}
 
 
   .main_wrapper {
